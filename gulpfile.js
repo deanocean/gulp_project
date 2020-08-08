@@ -9,6 +9,8 @@ const sourcemaps = require('gulp-sourcemaps');
 const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const mainBowerFiles = require('main-bower-files');
+const browserSync = require('browser-sync').create();
+
 
 gulp.task('copyhtml', function(){
     return gulp.src('./source/**/*.html')
@@ -20,19 +22,11 @@ gulp.task('jade', function() {
    
     gulp.src('./source/*.jade')
       .pipe(plumber())
-      .pipe($.data(function(){
-        let mrtData = require('./source/data/stations.json');
-        let menu = require('./source/data/list.json');
-        let source = {
-          'mrtData': mrtData,
-          'menu': menu
-        }
-        return source;
-      }))
       .pipe(jade({
         pretty: true
       }))
       .pipe(gulp.dest('./public/'))
+      .pipe(browserSync.stream())
   });
 
   gulp.task('sass', function () {
@@ -43,7 +37,8 @@ gulp.task('jade', function() {
       // 編譯完成 CSS
       .pipe(postcss([ autoprefixer() ]))
       .pipe(sourcemaps.write('.'))
-      .pipe(gulp.dest('./public/css'));
+      .pipe(gulp.dest('./public/css'))
+      .pipe(browserSync.stream())
   });
   
   gulp.task('babel', () =>
@@ -55,6 +50,7 @@ gulp.task('jade', function() {
         .pipe(concat('all.js'))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./public/js'))
+        .pipe(browserSync.stream())
   );
 
   gulp.task('bower', function() {
@@ -68,10 +64,18 @@ gulp.task('jade', function() {
       .pipe(gulp.dest('./public/js'))
   });
 
+  gulp.task('browser-sync', function() {
+    browserSync.init({
+        server: {
+            baseDir: "./public"
+        }
+    });
+  });
+
   gulp.task('watch', function () {
     gulp.watch('./source/scss/**/*.scss', ['sass']);
     gulp.watch('./source/**/*.jade', ['jade']);
     gulp.watch('./source/**/*.js', ['babel']);
   });
 
-  gulp.task('default', ['jade', 'sass', 'babel', 'vendorJs' ,'watch']);
+  gulp.task('default', ['jade', 'sass', 'babel', 'vendorJs' , 'browser-sync', 'watch']);
