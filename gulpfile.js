@@ -14,6 +14,8 @@ const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify');
 var minimist = require('minimist');
 var gulpif = require('gulp-if');
+var clean = require('gulp-clean');
+var gulpSequence = require('gulp-sequence')
 
 const envOptions = {
   string: 'env',
@@ -21,6 +23,11 @@ const envOptions = {
 }
 const options = minimist(process.argv.slice(2), envOptions);
 console.log(options)
+
+gulp.task('clean', function () {
+  return gulp.src(['./.tmp', './public'], {read: false})
+      .pipe(clean());
+});
 
 gulp.task('copyhtml', function(){
     return gulp.src('./source/**/*.html')
@@ -94,5 +101,7 @@ gulp.task('jade', function() {
     gulp.watch('./source/**/*.jade', ['jade']);
     gulp.watch('./source/**/*.js', ['babel']);
   });
+
+  gulp.task('sequence', gulpSequence('clean', 'jade', 'sass', 'babel', 'vendorJs'))
 
   gulp.task('default', ['jade', 'sass', 'babel', 'vendorJs' , 'browser-sync', 'watch']);
