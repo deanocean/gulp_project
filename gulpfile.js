@@ -17,6 +17,8 @@ var gulpif = require('gulp-if');
 var clean = require('gulp-clean');
 var gulpSequence = require('gulp-sequence');
 const imagemin = require('gulp-imagemin');
+var ghPages = require('gulp-gh-pages');
+
 
 const envOptions = {
   string: 'env',
@@ -107,6 +109,11 @@ gulp.task('jade', function() {
     gulp.watch('./source/scss/**/*.scss', ['sass']);
     gulp.watch('./source/**/*.jade', ['jade']);
     gulp.watch('./source/**/*.js', ['babel']);
+  });
+
+  gulp.task('deploy', function() {
+    return gulp.src('./public/**/*')
+      .pipe(ghPages());
   });
 
   gulp.task('sequence', gulpSequence('clean', 'jade', 'sass', 'babel', 'vendorJs', 'imageMin'))
