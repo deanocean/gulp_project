@@ -10,7 +10,8 @@ const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const mainBowerFiles = require('main-bower-files');
 const browserSync = require('browser-sync').create();
-
+const cleanCSS = require('gulp-clean-css');
+const uglify = require('gulp-uglify');
 
 gulp.task('copyhtml', function(){
     return gulp.src('./source/**/*.html')
@@ -36,6 +37,7 @@ gulp.task('jade', function() {
       .pipe(sass().on('error', sass.logError))
       // 編譯完成 CSS
       .pipe(postcss([ autoprefixer() ]))
+      .pipe(cleanCSS())
       .pipe(sourcemaps.write('.'))
       .pipe(gulp.dest('./public/css'))
       .pipe(browserSync.stream())
@@ -48,6 +50,11 @@ gulp.task('jade', function() {
             presets: ['@babel/env']
         }))
         .pipe(concat('all.js'))
+        .pipe(uglify({
+          compress: {
+            drop_console: true  // 自動移除console
+          }
+        }))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./public/js'))
         .pipe(browserSync.stream())
@@ -61,6 +68,7 @@ gulp.task('jade', function() {
   gulp.task('vendorJs', ['bower'], function(){
     return gulp.src('./.tmp/vendors/**/*.js')
       .pipe(concat('vendors.js'))
+      .pipe(uglify())
       .pipe(gulp.dest('./public/js'))
   });
 
