@@ -15,7 +15,8 @@ const uglify = require('gulp-uglify');
 var minimist = require('minimist');
 var gulpif = require('gulp-if');
 var clean = require('gulp-clean');
-var gulpSequence = require('gulp-sequence')
+var gulpSequence = require('gulp-sequence');
+const imagemin = require('gulp-imagemin');
 
 const envOptions = {
   string: 'env',
@@ -96,12 +97,18 @@ gulp.task('jade', function() {
     });
   });
 
+  exports.imageMin = () => (
+    gulp.src('./source/images/*')
+        .pipe(gulpif( options.env === 'production' , imagemin()))
+        .pipe(gulp.dest('./public/images'))
+  );
+
   gulp.task('watch', function () {
     gulp.watch('./source/scss/**/*.scss', ['sass']);
     gulp.watch('./source/**/*.jade', ['jade']);
     gulp.watch('./source/**/*.js', ['babel']);
   });
 
-  gulp.task('sequence', gulpSequence('clean', 'jade', 'sass', 'babel', 'vendorJs'))
+  gulp.task('sequence', gulpSequence('clean', 'jade', 'sass', 'babel', 'vendorJs', 'imageMin'))
 
-  gulp.task('default', ['jade', 'sass', 'babel', 'vendorJs' , 'browser-sync', 'watch']);
+  gulp.task('default', ['jade', 'sass', 'babel', 'vendorJs' , 'browser-sync', 'imageMin', 'watch']);
