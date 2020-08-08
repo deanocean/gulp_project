@@ -1,0 +1,12 @@
+body {
+  background-color: #91c3c7; }
+
+.card {
+  transform: rotate(50deg);
+  width: -webkit-min-content;
+  width: -moz-min-content;
+  width: min-content;
+  -webkit-filter: blur(3px);
+          filter: blur(3px); }
+
+/*# sourceMappingURL=all.css.map */
