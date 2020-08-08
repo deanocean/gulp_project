@@ -1,0 +1,11 @@
+$primary-color: #91c3c7;
+
+body {
+    background-color: $primary-color;
+}
+
+.card {
+    transform: rotate(50deg);
+    width: min-content;
+    filter : blur(3px);
+}
