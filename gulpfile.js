@@ -18,7 +18,7 @@ var clean = require('gulp-clean');
 var gulpSequence = require('gulp-sequence');
 const imagemin = require('gulp-imagemin');
 var ghPages = require('gulp-gh-pages');
-
+var data = require('gulp-data');
 
 const envOptions = {
   string: 'env',
@@ -42,6 +42,15 @@ gulp.task('jade', function() {
    
     gulp.src('./source/*.jade')
       .pipe(plumber())
+      .pipe(data(function(){
+        let stationData = require('./source/data/stations.json')
+        let menu = require('./source/data/menu.json')
+        let source = {
+          "stationData": stationData,
+          "menu": menu
+        }
+        return source;
+      }))
       .pipe(jade({
         pretty: true
       }))
