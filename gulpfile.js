@@ -88,7 +88,10 @@ gulp.task('jade', function() {
   });
 
   gulp.task('vendorJs', ['bower'], function(){
-    return gulp.src('./.tmp/vendors/**/*.js')
+    return gulp.src([
+        './.tmp/vendors/**/*.js',
+        './node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
+      ])
       .pipe(concat('vendors.js'))
       .pipe(gulpif( options.env === 'production' , uglify()))
       .pipe(gulp.dest('./public/js'))
@@ -98,7 +101,8 @@ gulp.task('jade', function() {
     browserSync.init({
         server: {
             baseDir: "./public"
-        }
+        },
+        reloadDebounce: 2000
     });
   });
 
