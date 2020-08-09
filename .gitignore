@@ -3,3 +3,4 @@ bower_components
 .tmp
 public
 .publish
+package-lock.json

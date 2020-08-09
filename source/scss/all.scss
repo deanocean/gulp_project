@@ -1,11 +1,5 @@
-$primary-color: #91c3c7;
+@import "functions";
+@import "helpers/variables";
+@import "mixins";
 
-body {
-    background-color: $primary-color;
-}
-
-.card {
-    transform: rotate(50deg);
-    width: min-content;
-    filter : blur(3px);
-}
+@import "bootstrap";
