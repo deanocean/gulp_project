@@ -1,5 +1,9 @@
 extend layout.jade
 
+block navbar
+    - var path = 'list.html'
+    include partials/navbar.jade
+
 block content
     .container
         .row.row-cols-1.row-cols-md-2

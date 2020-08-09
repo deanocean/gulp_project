@@ -1,5 +1,9 @@
 extend layout.jade
 
+block navbar
+    - var path = 'index.html'
+    include partials/navbar.jade
+
 block content
     p #{menu.list[1].name}
 
