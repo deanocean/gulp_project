@@ -1,0 +1,13 @@
+extend layout.jade
+
+block content
+    .container
+        .row.row-cols-1.row-cols-md-2
+            each item in stationData.resource
+                .col.mb-4
+                    .card
+                        img.card-img-top(src='https://picsum.photos/600/150?random', alt='...')
+                        .card-body
+                            h5.card-title 出發站：#{item.Station}
+                            p.card-text
+                                | 目的地：#{item.Destination} <br> 時間：#{item.UpdateTime}
